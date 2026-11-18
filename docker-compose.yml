@@ -1,0 +1,16 @@
+services:
+  backend:
+    build: ./backend
+    env_file: .env
+    ports: ["8000:8000"]
+    volumes: ["commute-data:/data"]
+    environment:
+      DATABASE_URL: sqlite:////data/commute.db
+  frontend:
+    build: ./frontend
+    ports: ["5173:5173"]
+    environment:
+      VITE_API_PROXY: http://backend:8000
+    depends_on: [backend]
+volumes:
+  commute-data:
