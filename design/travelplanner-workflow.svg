@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+<defs>
+  <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f2f7f1"/><stop offset="1" stop-color="#edf1f8"/></linearGradient>
+  <linearGradient id="green" x2="1" y2="1"><stop stop-color="#245a43"/><stop offset="1" stop-color="#438268"/></linearGradient>
+  <linearGradient id="mint" x2="1" y2="1"><stop stop-color="#e6f4e9"/><stop offset="1" stop-color="#d5ebe0"/></linearGradient>
+  <linearGradient id="purple" x2="1" y2="1"><stop stop-color="#7558db"/><stop offset="1" stop-color="#533bb7"/></linearGradient>
+  <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="7" stdDeviation="10" flood-color="#29463a" flood-opacity=".11"/></filter>
+  <style>
+    .sans{font-family:Inter,Arial,sans-serif;fill:#233d33}.muted{fill:#7e9387}.tiny{font-size:10px;letter-spacing:1.4px;font-weight:700}.label{font-size:12px;font-weight:700;letter-spacing:1.5px}.title{font-size:48px;font-weight:750;letter-spacing:-1.8px}.subtitle{font-size:18px;fill:#687d71}.h2{font-size:23px;font-weight:750}.h3{font-size:15px;font-weight:700}.body{font-size:13px}.small{font-size:11px}.white{fill:#fff}.line{stroke:#dbe6dd;stroke-width:1}
+  </style>
+</defs>
+<rect width="1600" height="1100" fill="url(#bg)"/>
+<!-- Header -->
+<circle cx="1515" cy="86" r="115" fill="#f8e6b7" opacity=".62"/><circle cx="55" cy="65" r="27" fill="#b9ddbe" opacity=".75"/>
+<g class="sans"><text x="64" y="56" class="label" fill="#4c8b68">TRAVELPLANNER · PRODUCT WORKFLOW</text><text x="62" y="119" class="title">Commute Companion</text><text x="65" y="153" class="subtitle">A calmer commute, with an SL route check and a clear backup decision.</text><text x="65" y="185" class="body" fill="#7558db" font-weight="700">PLAN  •  MONITOR  •  RESPOND  •  REVIEW</text></g>
+<!-- Left design screens panel -->
+<rect x="38" y="220" width="895" height="610" rx="25" fill="#fff" stroke="#e1eae2" filter="url(#shadow)"/>
+<rect x="62" y="239" width="212" height="34" rx="17" fill="#eaf4eb"/><text x="80" y="262" class="sans h3" fill="#386b4e">PRODUCT SCREENS</text>
+<text x="64" y="304" class="sans small muted">OVERVIEW DASHBOARD</text><text x="352" y="304" class="sans small muted">CREATE A COMMUTE</text><text x="651" y="304" class="sans small muted">CHECK RESULT</text>
+<!-- desktop mock 1 -->
+<g filter="url(#shadow)"><rect x="62" y="320" width="270" height="480" rx="16" fill="#fbfdfb" stroke="#dfe8e0"/></g>
+<rect x="62" y="320" width="270" height="40" rx="16" fill="#fff"/><rect x="62" y="346" width="270" height="14" fill="#fff"/><rect x="77" y="333" width="20" height="16" rx="5" fill="#d8ebdc"/><path d="M83 341h8m-4-5v10" stroke="#386b4e" stroke-width="1.7"/><text x="105" y="346" class="sans small" font-weight="700">commute companion</text><circle cx="311" cy="340" r="4" fill="#b6c5ba"/>
+<text x="80" y="386" class="sans tiny" fill="#54866a">YOUR COMMUTE, COVERED</text><text x="80" y="416" class="sans" font-size="23" font-weight="700">Good morning,</text><text x="80" y="443" class="sans" font-size="23" font-weight="700">Anuhya.</text>
+<rect x="80" y="463" width="234" height="74" rx="12" fill="url(#mint)"/><text x="97" y="487" class="sans tiny" fill="#5d8469">NEXT DEPARTURE</text><text x="97" y="515" class="sans" font-size="21" font-weight="750">08:30</text><circle cx="281" cy="500" r="20" fill="#fff"/><path d="M273 501l6 6 11-13" fill="none" stroke="#4e9169" stroke-width="3"/>
+<text x="81" y="566" class="sans h3">Your commute</text><rect x="80" y="581" width="234" height="153" rx="12" fill="#fff" stroke="#e3ebe4"/>
+<rect x="94" y="595" width="86" height="22" rx="11" fill="#eaf5ed"/><circle cx="106" cy="606" r="3" fill="#4b9966"/><text x="115" y="610" class="sans small" fill="#4b805c" font-weight="700">On time</text><text x="94" y="642" class="sans small muted">STOCKHOLM CENTRAL</text><text x="94" y="662" class="sans h3">Home</text><path d="M101 672v17" stroke="#b8cebd" stroke-width="2"/><circle cx="101" cy="672" r="3" fill="#7ba989"/><circle cx="101" cy="689" r="3" fill="#47835c"/><text x="112" y="687" class="sans small muted">08:30 · 10 min threshold</text><line x1="94" y1="702" x2="300" y2="702" class="line"/><text x="94" y="721" class="sans small" fill="#477858" font-weight="700">SL route · Red line</text>
+<rect x="80" y="750" width="234" height="34" rx="8" fill="#386b4e"/><text x="137" y="772" class="sans small white" font-weight="700">+ Create commute</text>
+<!-- mock 2 -->
+<g filter="url(#shadow)"><rect x="352" y="320" width="270" height="480" rx="16" fill="#fbfdfb" stroke="#dfe8e0"/></g>
+<rect x="352" y="320" width="270" height="40" rx="16" fill="#fff"/><rect x="352" y="346" width="270" height="14" fill="#fff"/><text x="370" y="346" class="sans small" fill="#64806d">←</text><text x="394" y="346" class="sans small" font-weight="700">Create a commute</text>
+<text x="372" y="388" class="sans h3">Journey details</text><text x="372" y="410" class="sans small muted">Choose where your journey starts and ends.</text>
+<text x="372" y="444" class="sans small" font-weight="700">FROM</text><rect x="372" y="453" width="230" height="38" rx="7" fill="#fff" stroke="#dbe6dd"/><text x="384" y="477" class="sans small">Stockholm Central</text><text x="582" y="477" class="sans small" fill="#659a72">⌖</text>
+<text x="372" y="518" class="sans small" font-weight="700">TO</text><rect x="372" y="527" width="230" height="38" rx="7" fill="#fff" stroke="#dbe6dd"/><text x="384" y="551" class="sans small">Kista, Stockholm</text><text x="582" y="551" class="sans small" fill="#659a72">⌖</text>
+<text x="372" y="603" class="sans h3">When do you travel?</text><text x="372" y="627" class="sans small muted">Europe/Stockholm time</text>
+<text x="372" y="655" class="sans small" font-weight="700">FREQUENCY</text><rect x="372" y="664" width="106" height="35" rx="7" fill="#fff" stroke="#dbe6dd"/><text x="384" y="686" class="sans small">Weekdays⌄</text><text x="494" y="655" class="sans small" font-weight="700">START TIME</text><rect x="494" y="664" width="108" height="35" rx="7" fill="#fff" stroke="#dbe6dd"/><text x="506" y="686" class="sans small">08:30</text>
+<text x="372" y="727" class="sans small" font-weight="700">DELAY THRESHOLD</text><rect x="372" y="736" width="230" height="35" rx="7" fill="#fff" stroke="#dbe6dd"/><text x="384" y="758" class="sans small">10 minutes</text>
+<rect x="372" y="779" width="230" height="1" fill="#edf1ed"/>
+<!-- mock 3 -->
+<g filter="url(#shadow)"><rect x="642" y="320" width="267" height="480" rx="16" fill="#fbfdfb" stroke="#dfe8e0"/></g>
+<rect x="642" y="320" width="267" height="40" rx="16" fill="#fff"/><rect x="642" y="346" width="267" height="14" fill="#fff"/><text x="660" y="346" class="sans small" font-weight="700">Journey check</text><rect x="660" y="379" width="96" height="24" rx="12" fill="#fff0e8"/><circle cx="674" cy="391" r="3" fill="#cd7452"/><text x="684" y="395" class="sans small" fill="#b66449" font-weight="700">Delayed</text>
+<text x="660" y="438" class="sans tiny" fill="#85998c">STOCKHOLM CENTRAL</text><text x="660" y="462" class="sans h3">Kista</text><path d="M669 478v29" stroke="#b8cebd" stroke-width="2"/><circle cx="669" cy="480" r="3" fill="#73a181"/><circle cx="669" cy="507" r="3" fill="#477858"/><text x="682" y="490" class="sans small">Red line · Blue line</text><text x="682" y="511" class="sans small muted">Transfer at T-Centralen</text>
+<rect x="660" y="532" width="231" height="78" rx="11" fill="#fff4ee"/><text x="678" y="556" class="sans tiny" fill="#b86a4e">LIVE DELAY</text><text x="678" y="588" class="sans" font-size="25" font-weight="750" fill="#b45f49">14 min</text><text x="778" y="585" class="sans small muted">Threshold: 10 min</text>
+<rect x="660" y="626" width="231" height="86" rx="11" fill="#f1eefc"/><circle cx="684" cy="650" r="10" fill="#6a50c8"/><path d="M679 650h10m-5-5v10" stroke="#fff" stroke-width="1.5"/><text x="702" y="654" class="sans small" font-weight="700">Demo ride simulated</text><text x="678" y="681" class="sans small muted">Local simulation · no real ride</text><text x="678" y="699" class="sans small" fill="#6452ad">Review ride details →</text>
+<text x="660" y="744" class="sans small muted">Check saved to Journey history</text><rect x="660" y="758" width="231" height="28" rx="7" fill="#386b4e"/><text x="733" y="777" class="sans small white" font-weight="700">View history</text>
+<!-- right workflow panel -->
+<rect x="958" y="220" width="604" height="610" rx="25" fill="#fff" stroke="#e1eae2" filter="url(#shadow)"/>
+<rect x="982" y="239" width="270" height="34" rx="17" fill="url(#green)"/><text x="1002" y="262" class="sans h3 white">COMMUTE AGENT WORKFLOW</text>
+<rect x="1090" y="296" width="340" height="59" rx="16" fill="#f0ecff" stroke="#ded6ff"/><circle cx="1120" cy="325" r="15" fill="#7258d6"/><circle cx="1116" cy="323" r="2" fill="#fff"/><circle cx="1124" cy="323" r="2" fill="#fff"/><path d="M1116 330q4 4 8 0" fill="none" stroke="#fff"/><text x="1148" y="321" class="sans h3">Commute rule</text><text x="1148" y="341" class="sans small muted">Route · schedule · delay threshold</text>
+<path d="M1260 355v27" stroke="#729980" stroke-width="3"/><path d="M1254 375l6 8 6-8" fill="#729980"/>
+<rect x="1090" y="386" width="340" height="63" rx="16" fill="url(#green)"/><circle cx="1121" cy="417" r="14" fill="#fff" opacity=".18"/><path d="M1113 421l8-10 8 10m-14 0h12" fill="none" stroke="#fff" stroke-width="2"/><text x="1148" y="413" class="sans h3 white">SL Journey Planner</text><text x="1148" y="434" class="sans small white" opacity=".82">Find route + real-time estimates</text>
+<path d="M1260 449v26" stroke="#729980" stroke-width="3"/><path d="M1254 468l6 8 6-8" fill="#729980"/>
+<path d="M1260 476v14h-147v15m147-15h148v15" fill="none" stroke="#9ab9a2" stroke-width="2"/>
+<rect x="988" y="505" width="252" height="81" rx="14" fill="#eaf5ed" stroke="#b8d8c0"/><circle cx="1016" cy="532" r="12" fill="#57a16e"/><path d="M1010 532l4 4 8-9" fill="none" stroke="#fff" stroke-width="2"/><text x="1037" y="532" class="sans h3" fill="#3e7551">Journey found</text><text x="1006" y="558" class="sans small">Read route and live delay</text><text x="1006" y="575" class="sans small muted">Compare with user threshold</text>
+<rect x="1275" y="505" width="252" height="81" rx="14" fill="#fff3e9" stroke="#f0c89e"/><circle cx="1303" cy="532" r="12" fill="#df9449"/><text x="1299" y="537" class="sans small white" font-weight="700">!</text><text x="1324" y="532" class="sans h3" fill="#a9682f">No journey / error</text><text x="1293" y="558" class="sans small">Show clear issue or alternatives</text><text x="1293" y="575" class="sans small muted">Keep result in history</text>
+<path d="M1114 586v25h146m148-25v25h-148" fill="none" stroke="#9ab9a2" stroke-width="2"/><path d="M1254 605l6 7 6-7" fill="#9ab9a2"/>
+<rect x="1090" y="615" width="340" height="66" rx="15" fill="#f5f2ff" stroke="#ddd4ff"/><text x="1115" y="642" class="sans h3" fill="#5b49ab">Decision: delay &gt; threshold?</text><text x="1115" y="663" class="sans small muted">Record On time or Delayed status + notify</text>
+<path d="M1260 681v24m0 0h-145v15m145-15h145v15" fill="none" stroke="#9ab9a2" stroke-width="2"/><text x="1082" y="705" class="sans tiny" fill="#4d8b62">NO</text><text x="1418" y="705" class="sans tiny" fill="#a76c3d">YES</text>
+<rect x="988" y="726" width="252" height="72" rx="14" fill="#eaf5ed" stroke="#b8d8c0"/><text x="1008" y="753" class="sans h3" fill="#3e7551">On time</text><text x="1008" y="775" class="sans small">Save check · show status</text>
+<rect x="1275" y="726" width="252" height="72" rx="14" fill="#fff0e9" stroke="#efc7b4"/><text x="1295" y="753" class="sans h3" fill="#aa624c">Delayed</text><text x="1295" y="775" class="sans small">Save local demo simulation</text>
+<!-- lower strip -->
+<rect x="38" y="852" width="960" height="212" rx="23" fill="#fff" stroke="#e1eae2" filter="url(#shadow)"/><rect x="62" y="871" width="207" height="34" rx="17" fill="#eeeaff"/><text x="80" y="894" class="sans h3" fill="#5b49ab">DESIGN TO DELIVERY</text>
+<g class="sans">
+ <rect x="64" y="927" width="135" height="103" rx="13" fill="#f7f3e8" stroke="#ead9a7"/><circle cx="84" cy="946" r="12" fill="#d7a746"/><text x="80" y="950" class="small white" font-weight="700">1</text><text x="79" y="976" class="h3">Map needs</text><text x="79" y="996" class="small muted">Plan daily commute</text><text x="79" y="1013" class="small muted">and backup needs</text>
+ <path d="M201 978h17" stroke="#7ea68a" stroke-width="2"/><path d="M214 973l6 5-6 5" fill="#7ea68a"/>
+ <rect x="222" y="927" width="135" height="103" rx="13" fill="#f0ecff" stroke="#d9d0ff"/><circle cx="242" cy="946" r="12" fill="#765bda"/><text x="238" y="950" class="small white" font-weight="700">2</text><text x="237" y="976" class="h3">Design flow</text><text x="237" y="996" class="small muted">Dashboard, rule</text><text x="237" y="1013" class="small muted">form, history</text>
+ <path d="M359 978h17" stroke="#7ea68a" stroke-width="2"/><path d="M372 973l6 5-6 5" fill="#7ea68a"/>
+ <rect x="380" y="927" width="135" height="103" rx="13" fill="#eaf5ed" stroke="#b8d8c0"/><circle cx="400" cy="946" r="12" fill="#54a06d"/><text x="396" y="950" class="small white" font-weight="700">3</text><text x="395" y="976" class="h3">Build UI</text><text x="395" y="996" class="small muted">React dashboard</text><text x="395" y="1013" class="small muted">+ API connection</text>
+ <path d="M517 978h17" stroke="#7ea68a" stroke-width="2"/><path d="M530 973l6 5-6 5" fill="#7ea68a"/>
+ <rect x="538" y="927" width="135" height="103" rx="13" fill="#fff0e9" stroke="#efc7b4"/><circle cx="558" cy="946" r="12" fill="#d17b57"/><text x="554" y="950" class="small white" font-weight="700">4</text><text x="553" y="976" class="h3">Connect</text><text x="553" y="996" class="small muted">SL · notifications</text><text x="553" y="1013" class="small muted">· Uber demo</text>
+ <path d="M675 978h17" stroke="#7ea68a" stroke-width="2"/><path d="M688 973l6 5-6 5" fill="#7ea68a"/>
+ <rect x="696" y="927" width="135" height="103" rx="13" fill="#e8f3f5" stroke="#b9d9dc"/><circle cx="716" cy="946" r="12" fill="#4c93a0"/><text x="712" y="950" class="small white" font-weight="700">5</text><text x="711" y="976" class="h3">Review</text><text x="711" y="996" class="small muted">Test journey states</text><text x="711" y="1013" class="small muted">and edge cases</text>
+ <path d="M833 978h17" stroke="#7ea68a" stroke-width="2"/><path d="M846 973l6 5-6 5" fill="#7ea68a"/>
+ <rect x="854" y="927" width="120" height="103" rx="13" fill="#eaf5ed" stroke="#b8d8c0"/><circle cx="874" cy="946" r="12" fill="#54a06d"/><text x="870" y="950" class="small white" font-weight="700">6</text><text x="869" y="976" class="h3">Improve</text><text x="869" y="996" class="small muted">Refine by</text><text x="869" y="1013" class="small muted">pilot feedback</text>
+</g>
+<!-- testing panel -->
+<rect x="1020" y="852" width="542" height="212" rx="23" fill="#fff" stroke="#e1eae2" filter="url(#shadow)"/><rect x="1044" y="871" width="210" height="34" rx="17" fill="#e4f3e9"/><text x="1062" y="894" class="sans h3" fill="#3e7551">TEST SCENARIOS</text>
+<g class="sans"><circle cx="1057" cy="934" r="7" fill="#58a16e"/><path d="M1054 934l2 2 4-5" fill="none" stroke="#fff" stroke-width="1.6"/><text x="1073" y="938" class="small">Create / edit commute rule</text>
+<circle cx="1057" cy="961" r="7" fill="#58a16e"/><path d="M1054 961l2 2 4-5" fill="none" stroke="#fff" stroke-width="1.6"/><text x="1073" y="965" class="small">SL returns route and estimate</text>
+<circle cx="1057" cy="988" r="7" fill="#58a16e"/><path d="M1054 988l2 2 4-5" fill="none" stroke="#fff" stroke-width="1.6"/><text x="1073" y="992" class="small">Delay below / above threshold</text>
+<circle cx="1057" cy="1015" r="7" fill="#58a16e"/><path d="M1054 1015l2 2 4-5" fill="none" stroke="#fff" stroke-width="1.6"/><text x="1073" y="1019" class="small">No route, API error, demo ride</text>
+<line x1="1285" y1="922" x2="1285" y2="1034" stroke="#e4ebe5"/><text x="1305" y="938" class="tiny" fill="#809487">STATUS STATES</text><rect x="1305" y="951" width="94" height="23" rx="11" fill="#eaf5ed"/><text x="1321" y="967" class="small" fill="#4b805c" font-weight="700">On time</text><rect x="1407" y="951" width="102" height="23" rx="11" fill="#fff0e8"/><text x="1422" y="967" class="small" fill="#b66449" font-weight="700">Delayed</text><rect x="1305" y="985" width="94" height="23" rx="11" fill="#f0ecff"/><text x="1321" y="1001" class="small" fill="#6350b2" font-weight="700">Demo simulated</text><rect x="1407" y="985" width="102" height="23" rx="11" fill="#fff4e9"/><text x="1422" y="1001" class="small" fill="#a9682f" font-weight="700">Needs attention</text><text x="1305" y="1030" class="sans small muted">Every result is saved to history.</text></g>
+<text x="64" y="1082" class="sans tiny muted">TRAVELPLANNER  /  SL STOCKHOLM  /  EUROPE-STOCKHOLM TIME</text><text x="1426" y="1082" class="sans tiny muted">FIGMA-READY BOARD</text>
+</svg>
+
+
