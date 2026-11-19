@@ -11,13 +11,28 @@ COOKIE = 'commute_session'
 MAX_AGE = 8 * 60 * 60
 
 def configured():
-    return bool(os.getenv('APP_USERNAME') and len(os.getenv('APP_PASSWORD', '')) >= 12)
+    return bool((os.getenv('APP_USERNAME') and len(os.getenv('APP_PASSWORD', '')) >= 12)
+                or demo_configured())
+
+def demo_configured():
+    return (os.getenv('DEMO_LOGIN_ENABLED', 'false').lower() == 'true'
+            and bool(os.getenv('DEMO_USERNAME'))
+            and len(os.getenv('DEMO_PASSWORD', '')) >= 12)
+
+def demo_account():
+    if not demo_configured():
+        return None
+    return {'username':os.getenv('DEMO_USERNAME'), 'password':os.getenv('DEMO_PASSWORD')}
 
 def valid_credentials(username, password):
     # Hash both values before comparison so length does not affect comparison timing.
     digest = lambda value: hashlib.sha256(value.encode()).digest()
-    return (secrets.compare_digest(digest(username), digest(os.getenv('APP_USERNAME', '')))
-            & secrets.compare_digest(digest(password), digest(os.getenv('APP_PASSWORD', ''))))
+    workspace_match = (secrets.compare_digest(digest(username), digest(os.getenv('APP_USERNAME', '')))
+                       & secrets.compare_digest(digest(password), digest(os.getenv('APP_PASSWORD', ''))))
+    demo = demo_account() or {'username':'', 'password':''}
+    demo_match = (secrets.compare_digest(digest(username), digest(demo['username']))
+                  & secrets.compare_digest(digest(password), digest(demo['password'])))
+    return workspace_match | demo_match
 
 def session_hash(token):
     return hashlib.sha256(token.encode()).hexdigest()
