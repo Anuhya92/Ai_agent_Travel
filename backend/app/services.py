@@ -1,14 +1,11 @@
-import csv, io, json, logging, math, os, secrets, time, zipfile
+import csv, io, json, logging, math, os, time, uuid, zipfile
 from datetime import datetime, timedelta, timezone
-from urllib.parse import urlencode
 import httpx
 from google.transit import gtfs_realtime_pb2
-from cryptography.fernet import Fernet
-from sqlalchemy import select
 from .core import TZ, delay_minutes, is_delayed
 from .models import *
 log = logging.getLogger('commute')
-DELAY_MESSAGE = 'Tough start for the day but lets make it better through a UBER ride'
+DELAY_MESSAGE = 'Transit is delayed beyond your threshold. A local demo ride was simulated and saved to your history; no real ride was requested.'
 ONTIME_MESSAGE = 'Everything as planned, have a great day'
 
 def fetch(url, **kwargs):
@@ -113,26 +110,10 @@ class Transit:
 transit=Transit()
 
 class Uber:
-    base='https://sandbox-api.uber.com/v1.2'
-    def token(self, db):
-        account=db.scalar(select(UberAccount))
-        if not account: raise ValueError('Connect an Uber sandbox account in Settings before booking.')
-        key=os.getenv('TOKEN_ENCRYPTION_KEY','')
-        if not key: raise ValueError('Configure TOKEN_ENCRYPTION_KEY before connecting Uber.')
-        refresh=Fernet(key.encode()).decrypt(account.encrypted_refresh_token.encode()).decode()
-        r=httpx.post('https://login.uber.com/oauth/v2/token',data={'client_id':os.getenv('UBER_CLIENT_ID'),'client_secret':os.getenv('UBER_CLIENT_SECRET'),'grant_type':'refresh_token','refresh_token':refresh},timeout=20); r.raise_for_status(); data=r.json()
-        if data.get('refresh_token'): account.encrypted_refresh_token=Fernet(key.encode()).encrypt(data['refresh_token'].encode()).decode(); db.commit()
-        return data['access_token']
     def book(self,db,j,pickup,destination,pickup_time,product_id=None):
-        if os.getenv('UBER_ENV','sandbox') != 'sandbox': raise ValueError('Only Uber sandbox bookings are supported; production rides are disabled.')
-        headers={'Authorization':'Bearer '+self.token(db),'Content-Type':'application/json'}
-        products=httpx.get(self.base+'/products',params={'latitude':j['origin_lat'],'longitude':j['origin_lon']},headers=headers,timeout=20); products.raise_for_status(); options=products.json().get('products',[])
-        product=next((p for p in options if p.get('product_id')==product_id),None) if product_id else (options[0] if options else None)
-        if not product: raise ValueError('No matching Uber sandbox product is available for this pickup.')
-        payload={'start_latitude':j['origin_lat'],'start_longitude':j['origin_lon'],'end_latitude':j['destination_lat'],'end_longitude':j['destination_lon'],'product_id':product['product_id']}
-        estimate=httpx.post(self.base+'/requests/estimate',json=payload,headers=headers,timeout=20); estimate.raise_for_status(); fare=estimate.json().get('fare',{}); fare_id=fare.get('fare_id')
-        if not fare_id: raise ValueError('Uber did not return a fare ID. Try again.')
-        # The API is an immediate request, not a scheduled pickup API.
-        result=httpx.post(self.base+'/requests',json={**payload,'fare_id':fare_id},headers=headers,timeout=20); result.raise_for_status(); data=result.json()
-        return UberRide(request_id=data['request_id'],status=data.get('status','requested'),product_name=product.get('display_name','Uber'),fare=str(fare.get('display','')) or None,pickup=pickup,destination=destination,pickup_time=pickup_time,eta=str(data.get('eta')) if data.get('eta') is not None else None,driver=json.dumps({'driver':data.get('driver'), 'vehicle':data.get('vehicle')}) if data.get('driver') or data.get('vehicle') else None)
+        # Local demo only: mirrors the reference implementation without calling Uber.
+        request_id='SIM-UBER-'+uuid.uuid4().hex[:12].upper()
+        demo_driver={'driver':{'name':'Demo driver · simulated'},'vehicle':{'make':'Demo vehicle','model':'simulated'}}
+        return UberRide(request_id=request_id,status='simulated',product_name='UberX · demo ride',fare=None,pickup=pickup,destination=destination,pickup_time=pickup_time,eta='5',driver=json.dumps(demo_driver))
 uber=Uber()
+

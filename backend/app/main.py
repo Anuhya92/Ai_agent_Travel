@@ -1,13 +1,12 @@
-import json, logging, os, re, secrets, threading, uuid
+import json, logging, os, re, threading, uuid
 from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 from collections import defaultdict, deque
 from typing import Literal
 import httpx
-from cryptography.fernet import Fernet
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse, JSONResponse
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, model_validator
 from sqlalchemy import select, delete
 from sqlalchemy.exc import IntegrityError
@@ -19,7 +18,7 @@ from . import auth, places, sl, alternatives
 logging.basicConfig(level=logging.INFO, format='%(message)s'); log=logging.getLogger('commute')
 Base.metadata.create_all(engine)
 scheduler=BackgroundScheduler(timezone=TZ)
-oauth_states={}; requests_by_ip=defaultdict(deque)
+requests_by_ip=defaultdict(deque)
 rule_locks=defaultdict(threading.RLock)
 class Coordinates(BaseModel):
     latitude: float = Field(ge=-90, le=90, allow_inf_nan=False)
@@ -111,9 +110,9 @@ def _run_check(rule_id, occurrence=None, manual=False):
                     for kind, prefix in [('from','origin'),('to','destination')]:
                         if kind in selected:
                             ride_j[prefix+'_lat'] = selected[kind]['latitude']; ride_j[prefix+'_lon'] = selected[kind]['longitude']
-                    ride=uber.book(db,ride_j,rule.from_location,rule.to_location,occurrence.isoformat(),settings.preferred_product if settings else None); ride.check_id=check.id; db.add(ride); check.status='uber_booked'
+                    ride=uber.book(db,ride_j,rule.from_location,rule.to_location,occurrence.isoformat(),settings.preferred_product if settings else None); ride.check_id=check.id; db.add(ride); check.status='demo_ride_simulated'
                 except Exception as e:
-                    log.exception('Uber booking failed rule=%s check=%s',rule.id,check.id); check.status='error'; check.error='Demo booking failed. Check your Uber connection and sandbox product availability.'
+                    log.exception('Uber booking failed rule=%s check=%s',rule.id,check.id); check.status='error'; check.error='Could not save the local demo ride record.'
             db.commit(); log.info('rule=%s check=%s trip=%s delay=%s decision=%s status=%s',rule.id,check.id,j['trip_id'],result['delay_minutes'],check.decision,check.status)
         except sl.NoJourney as e:
             plan=alternatives.suggest(rule.from_location,rule.to_location,occurrence,str(e))
@@ -201,13 +200,13 @@ def agent_status():
             'missing_configuration':[key for key in required if not os.getenv(key)],
             'rules':len(rules), 'checks':len(checks),
             'delays':sum(c.decision == 'delayed' for c in checks),
-            'rides':sum(c.status == 'uber_booked' for c in checks),
+            'rides':sum(c.status in ('uber_booked','demo_ride_simulated') for c in checks),
             'errors':sum(c.status == 'error' for c in checks),
             'next_check':min((r.next_run for r in rules), default=None),
         }
 
 @app.get('/api/health')
-def health(): return {'status':'ok','uber_environment':'sandbox','check_lead_minutes':int(os.getenv('CHECK_LEAD_MINUTES','10')),'google_places_enabled':places.provider() == 'google','location_provider':places.provider(),'transit_provider':sl.provider(),'gemini_configured':alternatives.configured()}
+def health(): return {'status':'ok','ride_mode':'local_simulation','check_lead_minutes':int(os.getenv('CHECK_LEAD_MINUTES','10')),'google_places_enabled':places.provider() == 'google','location_provider':places.provider(),'transit_provider':sl.provider(),'gemini_configured':alternatives.configured()}
 @app.get('/api/rules')
 def rules():
     with Session() as db: return [{**rule_data(r),'latest':(history(db,r.id) or [None])[0]} for r in db.scalars(select(CommuteRule)).all()]
@@ -265,7 +264,7 @@ def rule_history(rule_id:int):
 def get_settings():
     with Session() as db:
         u=db.get(User,1)
-        return {'default_threshold':u.default_threshold if u else 10,'preferred_product':u.preferred_product if u else None,'email':u.email if u else None,'uber_connected':bool(db.scalar(select(UberAccount))),'uber_environment':'sandbox','check_lead_minutes':int(os.getenv('CHECK_LEAD_MINUTES','10')),'google_places_enabled':places.provider() == 'google','location_provider':places.provider(),'transit_provider':sl.provider(),'gemini_configured':alternatives.configured()}
+        return {'default_threshold':u.default_threshold if u else 10,'preferred_product':u.preferred_product if u else None,'email':u.email if u else None,'ride_mode':'local_simulation','check_lead_minutes':int(os.getenv('CHECK_LEAD_MINUTES','10')),'google_places_enabled':places.provider() == 'google','location_provider':places.provider(),'transit_provider':sl.provider(),'gemini_configured':alternatives.configured()}
 @app.put('/api/settings')
 def set_settings(data:Settings):
     with Session() as db:
@@ -291,23 +290,6 @@ def location_details(place_id:str, session_token:str=''):
     try: return places.details(place_id,session_token)
     except Exception: raise HTTPException(502,'Could not resolve this place. Please select it again.')
 
-@app.post('/api/uber/connect')
-def connect():
-    client=os.getenv('UBER_CLIENT_ID'); redirect=os.getenv('UBER_REDIRECT_URI'); key=os.getenv('TOKEN_ENCRYPTION_KEY')
-    if not client or not redirect or not key: raise HTTPException(400,'Configure Uber credentials, redirect URI, and TOKEN_ENCRYPTION_KEY first.')
-    state=secrets.token_urlsafe(32); oauth_states[state]=datetime.now().timestamp()
-    from urllib.parse import urlencode
-    return {'url':'https://login.uber.com/oauth/v2/authorize?'+urlencode({'client_id':client,'response_type':'code','redirect_uri':redirect,'scope':'request','state':state})}
-@app.get('/api/uber/callback')
-def callback(code:str,state:str):
-    created=oauth_states.pop(state,None)
-    if not created or datetime.now().timestamp()-created>600: raise HTTPException(400,'OAuth session expired. Start connecting again.')
-    try:
-        r=httpx.post('https://login.uber.com/oauth/v2/token',data={'client_id':os.getenv('UBER_CLIENT_ID'),'client_secret':os.getenv('UBER_CLIENT_SECRET'),'grant_type':'authorization_code','redirect_uri':os.getenv('UBER_REDIRECT_URI'),'code':code},timeout=20); r.raise_for_status(); refresh=r.json()['refresh_token']; encrypted=Fernet(os.environ['TOKEN_ENCRYPTION_KEY'].encode()).encrypt(refresh.encode()).decode()
-        with Session() as db:
-            account=db.scalar(select(UberAccount)) or UberAccount(encrypted_refresh_token=encrypted); account.encrypted_refresh_token=encrypted; db.add(account); db.commit()
-    except Exception: raise HTTPException(400,'Uber connection failed. Check your sandbox credentials and try again.')
-    return RedirectResponse(os.getenv('FRONTEND_URL','http://localhost:5173')+'/?page=settings')
 @app.post('/api/uber/demo-ride')
 def demo_ride(): raise HTTPException(400,'Run a commute check to create a demo ride with a verified journey.')
 @app.delete('/api/uber/rides/{request_id}')
@@ -315,7 +297,7 @@ def cancel(request_id:str):
     with Session() as db:
         ride=db.scalar(select(UberRide).where(UberRide.request_id==request_id))
         if not ride: raise HTTPException(404,'Demo ride not found')
-        if os.getenv('UBER_ENV','sandbox')!='sandbox': raise HTTPException(400,'Only sandbox cancellation is supported.')
-        try:
-            r=httpx.delete(uber.base+'/requests/'+request_id,headers={'Authorization':'Bearer '+uber.token(db)},timeout=20); r.raise_for_status(); ride.status='cancelled'; db.commit(); return serialize(ride)
-        except Exception: raise HTTPException(502,'Could not cancel the demo ride. Check your Uber connection and try again.')
+        ride.status='cancelled'; db.commit(); return serialize(ride)
+
+
+
