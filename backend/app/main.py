@@ -156,7 +156,7 @@ async def middleware(request: Request, call_next):
     public = {'/api/health', '/api/auth/login', '/api/auth/session'}
     if request.url.path not in public and request.method != 'OPTIONS':
         if not auth.configured():
-            return JSONResponse({'detail':'Set APP_USERNAME and APP_PASSWORD (at least 12 characters) on the server.'}, status_code=503)
+            return JSONResponse({'detail':'Configure workspace credentials or enable the demo login on the server.'}, status_code=503)
         if not auth.authenticated(request.cookies.get(auth.COOKIE)):
             return JSONResponse({'detail':'Sign in to your workspace.'}, status_code=401)
     response=await call_next(request); response.headers['X-Request-ID']=request_id
@@ -168,12 +168,12 @@ class LoginInput(BaseModel):
 
 @app.get('/api/auth/session')
 def session_status(request: Request):
-    return {'authenticated':auth.authenticated(request.cookies.get(auth.COOKIE)), 'configured':auth.configured()}
+    return {'authenticated':auth.authenticated(request.cookies.get(auth.COOKIE)), 'configured':auth.configured(), 'demo_account':auth.demo_account()}
 
 @app.post('/api/auth/login')
 def login(data: LoginInput):
     if not auth.configured():
-        raise HTTPException(503, 'Set APP_USERNAME and APP_PASSWORD (at least 12 characters) on the server.')
+        raise HTTPException(503, 'Configure workspace credentials or enable the demo login on the server.')
     if not auth.valid_credentials(data.username, data.password):
         raise HTTPException(401, 'Incorrect username or password.')
     response = JSONResponse({'authenticated':True})

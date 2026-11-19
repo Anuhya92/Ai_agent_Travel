@@ -41,12 +41,12 @@ The business problem is repeated manual checking of a commute and arranging a ba
 
 ### Credential access
 
-Set `APP_USERNAME` and a unique `APP_PASSWORD` of at least 12 characters in `.env`, then restart the backend. Sign in from the dashboard. API routes and API documentation require a session; health and sign-in status remain public. Sessions expire after eight hours, are stored as hashes in the database, and are revoked on sign-out. Cookies are HttpOnly with SameSite=Lax. If login credentials are missing, workspace API access is blocked. This is a shared workspace: anyone given its credentials can manage all its rules and connections. It does not provide separate user accounts or private per-user data. Changing credentials requires revoking existing sessions (delete rows in `workspace_sessions`) if immediate sign-out is needed.
+Set `APP_USERNAME` and a unique `APP_PASSWORD` of at least 12 characters in `.env`, then restart the backend. Sign in from the dashboard. For the assignment demo, `.env` enables a shared demo login: username `demo`, password `CommuteDemo2026!`. The login screen displays these credentials only while `DEMO_LOGIN_ENABLED=true`. Anyone using the shared demo account can view and change the same commute data; disable it by setting `DEMO_LOGIN_ENABLED=false` outside a demo. API routes and API documentation require a session; health and sign-in status remain public. Sessions expire after eight hours, are stored as hashes in the database, and are revoked on sign-out. Cookies are HttpOnly with SameSite=Lax. If neither valid workspace credentials nor enabled demo credentials are configured, workspace API access is blocked. This is a shared workspace: anyone given its credentials can manage all its rules and connections. It does not provide separate user accounts or private per-user data. Changing credentials requires revoking existing sessions (delete rows in `workspace_sessions`) if immediate sign-out is needed.
 
 ### Deliver through GitHub
 
 1. Configure the workspace login and any optional provider credentials described above. Keep `.env` excluded from version control. No Uber credentials are needed.
-2. Run `docker compose up --build` and visit `http://localhost:5173`. Sign in with the configured workspace credentials.
+2. Run `docker compose up --build` and visit `http://localhost:5173`. Sign in with the configured workspace or demo credentials.
 3. Create a commute using a location suggestion. Use Test check, inspect Journey history, and inspect the agent results on Overview. When delay exceeds the threshold, the app saves a local demo ride simulation. Keep the backend running for scheduled checks; browser notifications require the dashboard to remain open.
 4. Share this source repository and README with the reviewer through GitHub or equivalent. Supply workspace credentials separately if sharing a running instance. Never include API secrets in the submission.
 
@@ -81,6 +81,14 @@ For route-specific Gemini recommendations, set `GEMINI_API_KEY` in `.env` and re
 Gemini does not have live operator timetable or booking access in this integration. Its results are explicitly labelled as unverified suggestions; the operator sites are where travelers confirm routes, times, fares and seats. Links are supplied by the application, not accepted from model output. Suggestions do not trigger Uber requests or book alternative tickets. When the key is missing, or Gemini times out, refuses the request or returns invalid output, the same official operator links remain available with an explanation. Provider error bodies and secrets are not shown.
 
 Suggested operator sites: [SJ](https://www.sj.se/en), [Vy](https://www.vy.se/en), [FlixBus](https://www.flixbus.se/).
+
+## SL delay claim assistance
+
+Journey history includes a claim-preparation panel for checks with a saved SL journey and delay estimate. It compares the planned and estimated arrival times, lets the traveler enter the actual alternative-transport operator, date and amount paid, and can copy claim notes. A receipt picker is only a local reminder; the file is not uploaded to this app. The traveler must attach the original receipt on SL's own form and submit the claim directly. The app's simulated Uber record is not evidence of a real trip or payment.
+
+SL's current guidance says alternative-transport compensation may apply when a traveler risks being more than 20 minutes late, is capped at 1,480 SEK, requires a receipt, and must be claimed within three months. SL assesses the claim and determines eligibility; the app does not guarantee reimbursement or submit claims. Review [SL's delay compensation rules](https://sl.se/kundservice/forseningsersattning) and [general travel conditions](https://sl.se/kundservice/villkor/sls-allmanna-villkor/avsnitt-2) before applying.
+
+
 
 
 
